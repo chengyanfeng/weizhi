@@ -9,6 +9,8 @@ import (
 	"github.com/astaxie/beego"
 	"encoding/xml"
 	"weizhi/def"
+	"math/rand"
+	"time"
 )
 
 //Map转xml
@@ -24,7 +26,6 @@ func MapToxml(userMap *StringMap) string {
 func GetSign(p *StringMap) string {
 	md := md5.New()
 	var sign = ""
-
 	strs := []string{}
 	for k := range *p {
 		strs = append(strs, k)
@@ -64,4 +65,16 @@ func JsonDecode(b []byte) (p *map[string]interface{}) {
 		Error("JsonDecode", string(b), err)
 	}
 	return
+}
+
+//生成随机字符串
+
+func  GetRandomString() string {
+	bytes := []byte(def.RANDSTR)
+	result := []byte{}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < 30; i++ {
+		result = append(result, bytes[r.Intn(len(bytes))])
+	}
+	return string(result)
 }
