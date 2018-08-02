@@ -34,7 +34,7 @@ func GetSign(p *StringMap) string {
 	for _, v := range strs {
 		sign = sign + v + "=" + (*p)[v] + "&"
 	}
-	sign = sign + "key=" + def.KEY
+	sign = sign + "key=" + def.WEIXINKEY
 	fmt.Print(sign)
 	md.Write([]byte(sign))
 	sign = fmt.Sprintf("%x", md5.Sum([]byte(sign)))
@@ -68,9 +68,8 @@ func JsonDecode(b []byte) (p *map[string]interface{}) {
 }
 
 //生成随机字符串
-
 func  GetRandomString() string {
-	bytes := []byte(def.RANDSTR)
+	bytes := []byte(def.WEIXINRANDSTR)
 	result := []byte{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < 30; i++ {

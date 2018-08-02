@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"github.com/smartwalle/alipay"
 	"strings"
 	"fmt"
 	"net/http"
@@ -16,8 +17,18 @@ type MainController struct {
 }
 
 func (c *MainController) Get() {
+	var client = alipay.New(def.ZHIFUBAOAPPID, "2088621740527589", def.ZHIFUBAOpublickKey, def.ZHIFUBAOprivateKey, true)
+	var p = alipay.AliPayTradeWapPay{}
+	p.NotifyURL = "http://203.86.24.181:3000/alipay"
+	p.ReturnURL = "http://203.86.24.181:3000"
+	p.Subject = "这是测试"
+	p.OutTradeNo = "234234123121w3q2eq131w2"
+	p.TotalAmount = "10.00"
+	p.ProductCode = "商品编码"
 
-	GetGzpt()
+	var html, _ = client.TradeWapPay(p)
+	fmt.Print(html)
+	c.Data["html"] = html
 	c.Data["Website"] = "beego.me"
 	c.Data["Email"] = "astaxie@gmail.com"
 	c.TplName = "index.tpl"
@@ -26,8 +37,8 @@ func (c *MainController) Get() {
 
 func GetGzpt(){
 	userMap:=&util.StringMap{}
-	(*userMap)["appid"] = def.APPID
-	(*userMap)["mch_id"] = def.MCH_ID
+	(*userMap)["appid"] = def.WEIXINAPPID
+	(*userMap)["mch_id"] = def.WEIXINMCH_ID
 	(*userMap)["nonce_str"] = util.GetRandomString()
 	(*userMap)["body"] = "erewrwe"
 	(*userMap)["out_trade_no"] = "123456"
@@ -44,8 +55,8 @@ func GetGzpt(){
 }
 func GetH5(){
 	userMap:=&util.StringMap{}
-	(*userMap)["appId"] = def.APPID
-	(*userMap)["timeStamp"] = def.MCH_ID
+	(*userMap)["appId"] = def.WEIXINAPPID
+	(*userMap)["timeStamp"] = "21312"
 	(*userMap)["nonceStr"] = util.GetRandomString()
 	(*userMap)["package"] = "erewrwe"
 	(*userMap)["sign_type"]="MD5"
@@ -55,4 +66,20 @@ func GetH5(){
 	defer response.Body.Close()
 	token_body, _ := ioutil.ReadAll(response.Body)
 	fmt.Print(string(token_body))
+}
+
+func (c *MainController)ZHIFUBAO(){
+	var client = alipay.New(def.ZHIFUBAOAPPID, "132123", def.ZHIFUBAOpublickKey, def.ZHIFUBAOprivateKey, false)
+	var p = alipay.AliPayTradeWapPay{}
+	p.NotifyURL = "http://www.baidu.com"
+	p.Subject = "这是测试"
+	p.OutTradeNo = "23423423121wqeqw"
+	p.TotalAmount = "10.00"
+	p.ProductCode = "商品编码"
+
+	var html, _ = client.TradeWapPay(p)
+	fmt.Print(html)
+	c.Data["html"] = html
+	// 将html输出到浏览器
+
 }
