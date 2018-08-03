@@ -21,11 +21,10 @@ func MapToxml(userMap *StringMap) string {
 	xml = strings.Replace(xml, "StringMap", "xml", -1)
 	return xml
 }
-
 //获取签名
 func GetSign(p *StringMap) string {
+	sign := ""
 	md := md5.New()
-	var sign = ""
 	strs := []string{}
 	for k := range *p {
 		strs = append(strs, k)
@@ -41,7 +40,6 @@ func GetSign(p *StringMap) string {
 	return strings.ToUpper(sign)
 
 }
-
 // interface 转json
 func JsonEncode(v interface{}) (r string) {
 	b, err := json.Marshal(v)
@@ -51,12 +49,10 @@ func JsonEncode(v interface{}) (r string) {
 	r = string(b)
 	return
 }
-
 // 记录err信息
 func Error(v ...interface{}) {
 	beego.Error(v)
 }
-
 //string 转P
 func JsonDecode(b []byte) (p *map[string]interface{}) {
 	p = &map[string]interface{}{}
@@ -66,7 +62,6 @@ func JsonDecode(b []byte) (p *map[string]interface{}) {
 	}
 	return
 }
-
 //生成随机字符串
 func  GetRandomString() string {
 	bytes := []byte(def.WEIXINRANDSTR)

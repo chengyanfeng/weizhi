@@ -15,26 +15,34 @@ import (
 type MainController struct {
 	beego.Controller
 }
+var client = alipay.New(def.ZHIFUBAOAPPID, "2088802940812132", def.ZHIFUBAO_KEY, def.ZHIFUBAOprivateKey, false)
 
 func (c *MainController) Get() {
-	var client = alipay.New(def.ZHIFUBAOAPPID, "2088621740527589", def.ZHIFUBAOpublickKey, def.ZHIFUBAOprivateKey, true)
 	var p = alipay.AliPayTradeWapPay{}
-	p.NotifyURL = "http://203.86.24.181:3000/alipay"
-	p.ReturnURL = "http://203.86.24.181:3000"
+	p.NotifyURL = "http://192.144.176.213:8070/return"
+	p.ReturnURL = "http://192.144.176.213:8070/apliy"
 	p.Subject = "这是测试"
-	p.OutTradeNo = "234234123121w3q2eq131w2"
+	p.OutTradeNo = "2342341233121w3q2eq131w2"
 	p.TotalAmount = "10.00"
 	p.ProductCode = "商品编码"
 
 	var html, _ = client.TradeWapPay(p)
+
 	fmt.Print(html)
 	c.Data["html"] = html
 	c.Data["Website"] = "beego.me"
 	c.Data["Email"] = "astaxie@gmail.com"
 	c.TplName = "index.tpl"
 }
+func(c *MainController) GetUrl() string{
+	req1 :=c.Ctx.Request
+	fmt.Print(req1,"--------------req1-------------")
+	fmt.Print(req1.Form,"------------req1.Form----------")
+	ok, err := client.VerifySign(req1.Form)
+	fmt.Println(ok, err)
+	return "success"
 
-
+}
 func GetGzpt(){
 	userMap:=&util.StringMap{}
 	(*userMap)["appid"] = def.WEIXINAPPID
@@ -69,7 +77,7 @@ func GetH5(){
 }
 
 func (c *MainController)ZHIFUBAO(){
-	var client = alipay.New(def.ZHIFUBAOAPPID, "132123", def.ZHIFUBAOpublickKey, def.ZHIFUBAOprivateKey, false)
+	var client = alipay.New(def.ZHIFUBAOAPPID, "132123", def.ZHIFUBAO_KEY, def.ZHIFUBAOprivateKey, false)
 	var p = alipay.AliPayTradeWapPay{}
 	p.NotifyURL = "http://www.baidu.com"
 	p.Subject = "这是测试"
